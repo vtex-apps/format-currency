@@ -8,7 +8,7 @@ Add `"vtex.format-currency": "1.x"` to your dependencies.
 
 ### API
 
-> `FormattedCurrency`
+#### `FormattedCurrency`
 
 ```jsx
 import React from 'react'
@@ -24,7 +24,7 @@ function Foo() {
 export default Foo
 ```
 
-> `formatCurrency`
+#### `formatCurrency`
 
 ```jsx
 import React from 'react'
