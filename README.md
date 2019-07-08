@@ -1,13 +1,46 @@
-# VTEX IO Base Component
+# Format Currency
 
-This demo component shows you how to make a simple yet complete VTEX IO component.
+> Format currency based on sales policy config.
 
-It shows a simple demonstration of the following features:
+## Usage
 
-- Declaring a component interface in `store/interfaces.json`.
-- Declaring a schema to receive props via Storefront.
-- Using the `messages` feature to have localized strings.
-- Using an NPM package like `react-intl`
-- Using another VTEX IO App like `vtex.styleguide`.
-- Using CSS Modules to make your component customizable via CSS on a store theme.
-- Using tachyons tokens to quickly style your components.
+Add `"vtex.format-currency": "1.x"` to your dependencies.
+
+### API
+
+> `FormattedCurrency`
+
+```jsx
+import React from 'react'
+import { FormattedCurrency } from 'vtex.format-currency'
+
+function Foo() {
+  return <FormattedCurrency value={10} />
+}
+// <Fragment>
+//   $ 10.00
+// </Fragment>
+
+export default Foo
+```
+
+> `formatCurrency`
+
+```jsx
+import React from 'react'
+import { injectIntl } from 'react-intl'
+import { formatCurrency } from 'vtex.format-currency'
+import { useRuntime } from 'vtex.render-runtime'
+
+function Foo({ intl }) {
+  const { culture } = useRuntime()
+  const value = formatCurrency({ intl, culture, value: 10 })
+
+  return <span>{value}</span>
+}
+// <span>
+//   $ 10.00
+// </span>
+
+export default injectIntl(Foo)
+```
