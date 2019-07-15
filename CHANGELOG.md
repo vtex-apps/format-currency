@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.1.0] - 2019-07-15
+
 ### Removed
 
 - `customCurrencyCode` option. The symbol is rendered correctly based on the locale, so if the sales policy locale is `es-CO`, Intl will render `$` instead of `COP`.
