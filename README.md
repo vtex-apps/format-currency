@@ -4,7 +4,7 @@
 
 ## Usage
 
-Add `"vtex.format-currency": "1.x"` to your dependencies.
+Add `"vtex.format-currency": "0.x"` to your dependencies.
 
 ### API
 
