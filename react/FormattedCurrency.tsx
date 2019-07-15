@@ -1,7 +1,6 @@
 import React, { FC, Fragment } from 'react'
 import { useRuntime } from 'vtex.render-runtime'
 import { injectIntl, InjectedIntlProps } from 'react-intl'
-import formatCurrency from './formatCurrency'
 
 const FormattedCurrency: FC<FormattedCurrencyProps & InjectedIntlProps> = ({
   value,
@@ -9,13 +8,17 @@ const FormattedCurrency: FC<FormattedCurrencyProps & InjectedIntlProps> = ({
 }) => {
   const { culture } = useRuntime()
 
+  const number = intl.formatNumber(value, {
+    style: 'currency',
+    currency: culture.currencyCode,
+    ...(culture.customCurrencyDecimalDigits != null
+      ? { minimumFractionDigits: culture.customCurrencyDecimalDigits }
+      : {}),
+  })
+
   return (
     <Fragment>
-      {formatCurrency({
-        intl,
-        value,
-        culture,
-      })}
+      {number}
     </Fragment>
   )
 }

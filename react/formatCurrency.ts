@@ -1,5 +1,3 @@
-import { customFormatCurrency } from './modules/customFormatCurrency'
-
 interface FormatCurrencyParams {
   intl: ReactIntl.InjectedIntl
   value: number
@@ -15,11 +13,12 @@ export default function formatCurrency({
   culture,
   value,
 }: FormatCurrencyParams) {
-  return customFormatCurrency({
-    intl,
-    value,
-    currencyCode: culture.currencyCode,
-    customCurrencyDecimalDigits: culture.customCurrencyDecimalDigits,
-    customCurrencySymbol: culture.customCurrencySymbol,
+
+  return intl.formatNumber(value, {
+    style: 'currency',
+    currency: culture.currencyCode,
+    ...(culture.customCurrencyDecimalDigits != null
+      ? { minimumFractionDigits: culture.customCurrencyDecimalDigits }
+      : {}),
   })
 }
