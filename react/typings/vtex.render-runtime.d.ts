@@ -1,7 +1,7 @@
 declare module 'vtex.render-runtime' {
   interface RuntimeContext {
     culture: {
-      currencyCode: string
+      currency: string
       customCurrencyDecimalDigits?: number | null
       customCurrencySymbol?: string | null
     }

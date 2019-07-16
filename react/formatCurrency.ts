@@ -2,7 +2,7 @@ interface FormatCurrencyParams {
   intl: ReactIntl.InjectedIntl
   value: number
   culture: {
-    currencyCode: string
+    currency: string
     customCurrencyDecimalDigits?: number | null
     customCurrencySymbol?: string | null
   }
@@ -16,7 +16,7 @@ export default function formatCurrency({
 
   return intl.formatNumber(value, {
     style: 'currency',
-    currency: culture.currencyCode,
+    currency: culture.currency,
     ...(culture.customCurrencyDecimalDigits != null
       ? { minimumFractionDigits: culture.customCurrencyDecimalDigits }
       : {}),

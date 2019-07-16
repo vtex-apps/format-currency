@@ -8,7 +8,7 @@ const mockedUseRuntime = useRuntime as jest.Mock<RuntimeContext>
 test('Use currencyCode as default format', () => {
   mockedUseRuntime.mockImplementation(() => ({
     culture: {
-      currencyCode: 'USD',
+      currency: 'USD',
       customCurrencyDecimalDigits: null,
       customCurrencySymbol: null,
     },
@@ -20,7 +20,7 @@ test('Use currencyCode as default format', () => {
 
   mockedUseRuntime.mockImplementation(() => ({
     culture: {
-      currencyCode: 'BRL',
+      currency: 'BRL',
       customCurrencyDecimalDigits: null,
       customCurrencySymbol: null,
     },
@@ -34,7 +34,7 @@ test('Use currencyCode as default format', () => {
 test('should use custom decimal digits', () => {
   mockedUseRuntime.mockImplementation(() => ({
     culture: {
-      currencyCode: 'BRL',
+      currency: 'BRL',
       customCurrencyDecimalDigits: 0,
       customCurrencySymbol: null,
     },

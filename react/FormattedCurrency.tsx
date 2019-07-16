@@ -10,7 +10,7 @@ const FormattedCurrency: FC<FormattedCurrencyProps & InjectedIntlProps> = ({
 
   const number = intl.formatNumber(value, {
     style: 'currency',
-    currency: culture.currencyCode,
+    currency: culture.currency,
     ...(culture.customCurrencyDecimalDigits != null
       ? { minimumFractionDigits: culture.customCurrencyDecimalDigits }
       : {}),
