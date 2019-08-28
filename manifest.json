@@ -5,7 +5,8 @@
   "title": "Format Currency",
   "description": "Format currency based on sales policy config",
   "builders": {
-    "react": "3.x"
+    "react": "3.x",
+    "docs": "0.x"
   },
   "scripts": {
     "postreleasy": "vtex publish --verbose"
