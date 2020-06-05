@@ -1,4 +1,4 @@
-import { IntlShape } from 'react-intl'
+import { IntlShape, FormatNumberOptions } from 'react-intl'
 
 interface FormatCurrencyParams {
   intl: IntlShape
@@ -15,26 +15,23 @@ export default function formatCurrency({
   culture,
   value,
 }: FormatCurrencyParams) {
+  const formatOptions: FormatNumberOptions = {
+    style: 'currency',
+    currency: culture.currency,
+  }
+
+  if (culture.customCurrencyDecimalDigits != null) {
+    formatOptions.minimumFractionDigits = culture.customCurrencyDecimalDigits
+  }
+
   /**
    * The default Romanian currency format is wrong
    * https://stackoverflow.com/questions/57526989/return-correct-currency-for-intl-numberformat-romanian-lei
   */
   if (culture.currency === 'RON' && intl.locale.indexOf('ro') === 0) {
-    return intl.formatNumber(value, {
-      style: 'currency',
-      currency: culture.currency,
-      currencyDisplay: 'name',
-      ...(culture.customCurrencyDecimalDigits != null
-        ? { minimumFractionDigits: culture.customCurrencyDecimalDigits }
-        : {}),
-    }).replace(' românești', '')
+    formatOptions.currencyDisplay = 'name'
+    return intl.formatNumber(value, formatOptions).replace(' românești', '')
   }
 
-  return intl.formatNumber(value, {
-    style: 'currency',
-    currency: culture.currency,
-    ...(culture.customCurrencyDecimalDigits != null
-      ? { minimumFractionDigits: culture.customCurrencyDecimalDigits }
-      : {}),
-  })
+  return intl.formatNumber(value, formatOptions)
 }
