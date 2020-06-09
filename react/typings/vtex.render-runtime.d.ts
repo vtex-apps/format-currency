@@ -8,4 +8,5 @@ declare module 'vtex.render-runtime' {
   }
 
   export const useRuntime = () => RuntimeContext
+  export const canUseDOM: boolean
 }

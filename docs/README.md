@@ -28,12 +28,14 @@ export default Foo
 
 ```jsx
 import React from 'react'
-import { injectIntl } from 'react-intl'
+import { useIntl } from 'react-intl'
 import { formatCurrency } from 'vtex.format-currency'
 import { useRuntime } from 'vtex.render-runtime'
 
 function Foo({ intl }) {
   const { culture } = useRuntime()
+  const intl = useIntl()
+
   const value = formatCurrency({ intl, culture, value: 10 })
 
   return <span>{value}</span>
@@ -42,5 +44,5 @@ function Foo({ intl }) {
 //   $ 10.00
 // </span>
 
-export default injectIntl(Foo)
+export default Foo
 ```
