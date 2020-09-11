@@ -14,5 +14,18 @@
   "scripts": {
     "postreleasy": "vtex publish --verbose"
   },
+  "settingsSchema": {
+    "title": "Format Currency",
+    "type": "object",
+    "properties": {
+      "currencyWithSupFormatting": {
+        "title": "Format currency with sup formatting",
+        "type": "boolean",
+        "default": false,
+        "access": "public",
+        "description": "Currency will be formatted making the decimals sup"
+      }
+    }
+  },
   "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"
 }
