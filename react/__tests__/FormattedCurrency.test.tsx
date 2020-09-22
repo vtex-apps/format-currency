@@ -1,7 +1,8 @@
 import React from 'react'
 import { render } from '@vtex/test-tools/react'
-import FormattedCurrency from '../FormattedCurrency'
 import { useRuntime, RuntimeContext } from 'vtex.render-runtime'
+
+import FormattedCurrency from '../FormattedCurrency'
 
 const mockedUseRuntime = useRuntime as jest.Mock<RuntimeContext>
 
@@ -14,9 +15,17 @@ test('Use currencyCode as default format', () => {
     },
   }))
 
-  const { getByText, rerender } = render(<FormattedCurrency value={10} />)
+  const { rerender, container } = render(<FormattedCurrency value={10} />)
 
-  getByText('$10.00')
+  let currency = container.querySelector('.currencyCode')
+  let integer = container.querySelector('.currencyInteger')
+  let decimal = container.querySelector('.currencyDecimal')
+  let fraction = container.querySelector('.currencyFraction')
+
+  expect(currency?.innerHTML).toBe('$')
+  expect(integer?.innerHTML).toBe('10')
+  expect(decimal?.innerHTML).toBe('.')
+  expect(fraction?.innerHTML).toBe('00')
 
   mockedUseRuntime.mockImplementation(() => ({
     culture: {
@@ -28,7 +37,15 @@ test('Use currencyCode as default format', () => {
 
   rerender(<FormattedCurrency value={10} />)
 
-  getByText('R$10.00')
+  currency = container.querySelector('.currencyCode')
+  integer = container.querySelector('.currencyInteger')
+  decimal = container.querySelector('.currencyDecimal')
+  fraction = container.querySelector('.currencyFraction')
+
+  expect(currency?.innerHTML).toBe('R$')
+  expect(integer?.innerHTML).toBe('10')
+  expect(decimal?.innerHTML).toBe('.')
+  expect(fraction?.innerHTML).toBe('00')
 })
 
 test('should use custom decimal digits', () => {
@@ -40,7 +57,15 @@ test('should use custom decimal digits', () => {
     },
   }))
 
-  const { getByText } = render(<FormattedCurrency value={10} />)
+  const { container } = render(<FormattedCurrency value={10} />)
 
-  getByText('R$10')
+  const currency = container.querySelector('.currencyCode')
+  const integer = container.querySelector('.currencyInteger')
+  const decimal = container.querySelector('.currencyDecimal')
+  const fraction = container.querySelector('.currencyFraction')
+
+  expect(currency).toBeTruthy()
+  expect(integer).toBeTruthy()
+  expect(decimal).toBeFalsy()
+  expect(fraction).toBeFalsy()
 })
