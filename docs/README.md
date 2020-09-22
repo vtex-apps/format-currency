@@ -17,11 +17,24 @@ import { FormattedCurrency } from 'vtex.format-currency'
 function Foo() {
   return <FormattedCurrency value={10} />
 }
-// <Fragment>
-//   $ 10.00
-// </Fragment>
+// <span class="vtex-format-currency-0-x-currencyContainer">
+//   <span class="vtex-format-currency-0-x-currencyCode">$</span>
+//   <span class="vtex-format-currency-0-x-currencyInteger">10<span>
+//   <span class="vtex-format-currency-0-x-currencyDecimal">.</span>
+//   <span class="vtex-format-currency-0-x-currencyFraction">00</span>
+// </span>
 
 export default Foo
+```
+
+:info: Do not change the symbol or hide the decimals and fraction using CSS! You can configure the currency, currency symbol and currency decimal places in the Trade Policy settings.
+
+![image](https://user-images.githubusercontent.com/284515/94180906-1c70ba80-fe75-11ea-9cf6-e84f059d924a.png)
+
+:warning: Since IE11 does not support the browser API `formatToParts`, in this browser it will fallback to render:
+
+```html
+<span class="vtex-format-currency-0-x-currencyContainer">$ 10.00</span>
 ```
 
 #### `formatCurrency`
