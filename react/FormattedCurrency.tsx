@@ -1,4 +1,4 @@
-import React, { FC, Fragment } from 'react'
+import React, { FC } from 'react'
 import { useRuntime } from 'vtex.render-runtime'
 import { FormatNumberOptions, useIntl } from 'react-intl'
 import { useCssHandles } from 'vtex.css-handles'
