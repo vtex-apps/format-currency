@@ -16,6 +16,7 @@ const formatter = new Intl.NumberFormat('en-US', {
 const hasFormatToParts = !!formatter.formatToParts
 
 const CSS_HANDLES = [
+  'currencyContainer',
   'currencyCode',
   'currencyLiteral',
   'currencyInteger',
@@ -52,7 +53,7 @@ const FormattedCurrency: FC<FormattedCurrencyProps> = ({ value }) => {
   if (!hasFormatToParts) {
     const number = formatCurrency({ intl, culture, value })
 
-    return <>{number}</>
+    return <span className={handles.currencyContainer}>{number}</span>
   }
 
   const formatOptions: FormatNumberOptions = {
@@ -99,7 +100,7 @@ const FormattedCurrency: FC<FormattedCurrencyProps> = ({ value }) => {
       )
     })
 
-  return <Fragment>{result}</Fragment>
+  return <span className={handles.currencyContainer}>{result}</span>
 }
 
 interface FormattedCurrencyProps {
