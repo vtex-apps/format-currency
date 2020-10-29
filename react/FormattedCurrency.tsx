@@ -4,6 +4,7 @@ import { FormatNumberOptions, useIntl } from 'react-intl'
 import { useCssHandles } from 'vtex.css-handles'
 
 import formatCurrency from './formatCurrency'
+import { roundUp } from './modules/numberRound'
 
 const formatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -65,6 +66,8 @@ const FormattedCurrency: FC<FormattedCurrencyProps> = ({ value }) => {
     formatOptions.minimumFractionDigits = culture.customCurrencyDecimalDigits
   }
 
+  const roundedValue = roundUp(value, culture.customCurrencyDecimalDigits ?? 2)
+
   /**
    * The default Romanian currency format is wrong
    * https://stackoverflow.com/questions/57526989/return-correct-currency-for-intl-numberformat-romanian-lei
@@ -77,7 +80,7 @@ const FormattedCurrency: FC<FormattedCurrencyProps> = ({ value }) => {
   }
 
   const result = intl
-    .formatNumberToParts(value, formatOptions)
+    .formatNumberToParts(roundedValue, formatOptions)
     .map((part, index) => {
       const handleName = handlesMap[part.type]
       // I spent 20 min here, but could not type this properly

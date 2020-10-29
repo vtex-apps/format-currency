@@ -1,5 +1,7 @@
 import { IntlShape, FormatNumberOptions } from 'react-intl'
 
+import { roundUp } from './modules/numberRound'
+
 interface FormatCurrencyParams {
   intl: IntlShape
   value: number
@@ -24,6 +26,8 @@ export default function formatCurrency({
     formatOptions.minimumFractionDigits = culture.customCurrencyDecimalDigits
   }
 
+  const roundedValue = roundUp(value, culture.customCurrencyDecimalDigits ?? 2)
+
   /**
    * The default Romanian currency format is wrong
    * https://stackoverflow.com/questions/57526989/return-correct-currency-for-intl-numberformat-romanian-lei
@@ -31,8 +35,10 @@ export default function formatCurrency({
   if (culture.currency === 'RON' && intl.locale.indexOf('ro') === 0) {
     formatOptions.currencyDisplay = 'name'
 
-    return intl.formatNumber(value, formatOptions).replace(' românești', '')
+    return intl
+      .formatNumber(roundedValue, formatOptions)
+      .replace(' românești', '')
   }
 
-  return intl.formatNumber(value, formatOptions)
+  return intl.formatNumber(roundedValue, formatOptions)
 }
