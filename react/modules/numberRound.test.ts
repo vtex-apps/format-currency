@@ -17,6 +17,12 @@ describe('roundUp', () => {
     const result = roundUp(num, decimals)
 
     expect(result).toBe(10.1)
+
+    const num2 = 10.12
+
+    const result2 = roundUp(num2, decimals)
+
+    expect(result2).toBe(10.12)
   })
 
   it("won't round if decimals are not considered (have value 0)", () => {
