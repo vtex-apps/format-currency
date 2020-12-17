@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "vtex.render-runtime": "8.x",
-    "vtex.css-handles": "0.x"
+    "vtex.css-handles": "1.x"
   },
   "scripts": {
     "postreleasy": "vtex publish --verbose"

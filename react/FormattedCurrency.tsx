@@ -1,7 +1,8 @@
-import React, { FC } from 'react'
+import React from 'react'
 import { useRuntime } from 'vtex.render-runtime'
 import { FormatNumberOptions, useIntl } from 'react-intl'
 import { useCssHandles } from 'vtex.css-handles'
+import type { CssHandlesTypes } from 'vtex.css-handles'
 
 import formatCurrency from './formatCurrency'
 
@@ -44,10 +45,15 @@ const handlesMap: Record<Intl.NumberFormatPartTypes, string> = {
   percentSign: 'currencyPercentSign',
 }
 
-const FormattedCurrency: FC<FormattedCurrencyProps> = ({ value }) => {
+interface Props {
+  value: number
+  classes?: CssHandlesTypes.CustomClasses<typeof CSS_HANDLES>
+}
+
+function FormattedCurrency({ value, classes }: Props) {
   const { culture } = useRuntime()
   const intl = useIntl()
-  const handles = useCssHandles(CSS_HANDLES)
+  const { handles } = useCssHandles(CSS_HANDLES, { classes })
 
   // In case it's IE11
   if (!hasFormatToParts) {
@@ -101,10 +107,6 @@ const FormattedCurrency: FC<FormattedCurrencyProps> = ({ value }) => {
     })
 
   return <span className={handles.currencyContainer}>{result}</span>
-}
-
-interface FormattedCurrencyProps {
-  value: number
 }
 
 export default FormattedCurrency
