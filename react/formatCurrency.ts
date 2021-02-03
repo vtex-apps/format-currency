@@ -4,7 +4,7 @@ interface FormatCurrencyParams {
   intl: IntlShape
   value: number
   culture: {
-    language?: string
+    language: string
     currency: string
     customCurrencyDecimalDigits?: number | null
     customCurrencySymbol?: string | null
@@ -25,7 +25,7 @@ export default function formatCurrency({
 }: FormatCurrencyParams) {
   const formatOptions: FormatNumberOptions = {
     style: 'currency',
-    currency: culture.currency
+    currency: culture.currency,
   }
 
   if (culture.customCurrencyDecimalDigits != null) {
