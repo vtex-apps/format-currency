@@ -39,13 +39,54 @@ export default function formatCurrency({
    * https://unicode-org.atlassian.net/browse/CLDR-13762
    * https://unicode-org.atlassian.net/projects/CLDR/issues/CLDR-13265?filter=allissues&orderby=created%20DESC&keyword=spanish
    */
-  if (culture.language == "es") {
-    const parts = intl.formatNumberToParts(value, formatOptions)
-    const numberParts: NumberParts = parts.reduce((obj, item) => ({ ...obj, [item.type]: item.value }), <NumberParts>{});
+  if (culture.language === "es") {
 
-    if (numberParts.integer?.length == 4)
-      return numberParts.currency + numberParts.integer.replace(/(?=(?:...)*$)/, ",") + numberParts.decimal + numberParts.fraction
+    console.log(formatOptions);
 
+
+    // Validate if the current value is the exact length for the UNICODE issue to be present
+    if (value.toFixed(2).length === 7) {
+      const parts = intl.formatNumberToParts(value, formatOptions)
+      const numberParts: NumberParts = parts.reduce((obj, item) => ({ ...obj, [item.type]: item.value }), <NumberParts>{});
+
+      //Get the group separator for current locale
+      const groupSeparator: string = intl.formatNumberToParts(12345678, formatOptions).filter(item => item.type === "group").pop()?.value || ""
+
+      const currency = [
+        ['es-AR', 'Argentina', 'ARS'],
+        ['es-BO', 'Bolivia', 'BOB'],
+        ['es-CL', 'Chile', 'CLP'],
+        ['es-CO', 'Colombia', 'COP'],
+        ['es-CR', 'Costa Rica', 'CRC'],
+        ['es-DO', 'República Dominicana', 'DOP'],
+        ['es-EC', 'Ecuador', 'USD'],
+        ['es-ES', 'España', 'EUR'],
+        ['es-GT', 'Guatemala', 'GTQ'],
+        ['es-HN', 'Honduras', 'HNL'],
+        ['es-MX', 'México', 'MXN'],
+        ['es-NI', 'Nicaragua', 'NIO'],
+        ['es-PA', 'Panamá', 'USD'],
+        ['es-PE', 'Perú', 'PEN'],
+        ['es-PR', 'Puerto Rico', 'USD'],
+        ['es-PY', 'Paraguay', 'PYG'],
+        ['es-SV', 'El Salvador', 'SVC'],
+        ['es-US', 'Estados Unidos', 'USD'],
+        ['es-UY', 'Uruguay', 'UYU'],
+        ['es-VE', 'Venezuela', 'VES']
+      ]
+
+      const result = numberParts?.currency + numberParts?.integer.replace(/(?=(?:...)*$)/, groupSeparator) + (numberParts?.decimal || '') + (numberParts?.fraction || '')
+
+      currency.map(i => {
+        console.log(intl.locale);
+        intl.locale = i[0]
+        console.log(JSON.stringify({ country: i[1], currency: i[2], notFormated: intl.formatNumber(value, { currency: i[2], style: "currency" }), formated: result }))
+      })
+
+      return result
+    }
+
+    // Escape with current validation for biger numbers
     return intl.formatNumber(value, formatOptions)
   }
 
