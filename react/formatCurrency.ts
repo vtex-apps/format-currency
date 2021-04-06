@@ -40,6 +40,11 @@ export default function formatCurrency({
    * https://unicode-org.atlassian.net/projects/CLDR/issues/CLDR-13265?filter=allissues&orderby=created%20DESC&keyword=spanish
    */
   if (culture.language === "es") {
+<<<<<<< HEAD
+=======
+    const parts = intl.formatNumberToParts(value, formatOptions)
+    const numberParts: NumberParts = parts.reduce((obj, item) => ({ ...obj, [item.type]: item.value }), <NumberParts>{});
+>>>>>>> fafcef797152a72ce98e878fcbbd0894e7bafcf7
 
     console.log(formatOptions);
 
