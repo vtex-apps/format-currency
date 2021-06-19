@@ -1,4 +1,5 @@
 import { IntlShape, FormatNumberOptions } from 'react-intl'
+import CustomFormat from './typings/CustomFormat'
 import Format from './utils'
 
 interface FormatCurrencyParams {
@@ -10,12 +11,14 @@ interface FormatCurrencyParams {
     customCurrencySymbol?: string | null
     language: string | null
   }
+  customFormat?: CustomFormat
 }
 
 export default function formatCurrency({
   intl,
   culture,
   value,
+  customFormat
 }: FormatCurrencyParams) {
   const formatOptions: FormatNumberOptions = {
     style: 'currency',
@@ -33,17 +36,20 @@ export default function formatCurrency({
    * https://unicode-org.atlassian.net/browse/CLDR-13762
    * https://unicode-org.atlassian.net/projects/CLDR/issues/CLDR-13265?filter=allissues&orderby=created%20DESC&keyword=spanish
    */
-  if (culture.language == 'es') {
-    let props = {
-      prefix: culture.customCurrencySymbol ?? undefined,
-      decimalScale: culture.customCurrencyDecimalDigits ?? undefined
+  if (culture.language == 'es' || customFormat) {
+
+    const newFormat = {
+      ...customFormat,
+      prefix: customFormat?.prefix ? customFormat?.prefix : culture.customCurrencySymbol,
+      decimalScale: customFormat?.decimalScale ? customFormat?.decimalScale : culture.customCurrencyDecimalDigits
     }
 
-    if (!props.prefix) delete props.prefix
-    if (!props.decimalScale) delete props.decimalScale
+    if (!newFormat.prefix) delete newFormat.prefix
+    if (!newFormat.decimalScale) delete newFormat.decimalScale
 
-    return new Format(props).currency(`${value}`)
+    return new Format(newFormat).currency(`${value}`)
   }
+
 
   /**
    * The default Romanian currency format is wrong

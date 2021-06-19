@@ -1,21 +1,6 @@
-type PropsType = {
-    decimalSeparator?: string
-    thousandsGroupStyle?: string
-    fixedDecimalScale?: boolean
-    prefix?: string
-    suffix?: string
-    allowNegative?: boolean
-    allowEmptyFormatting?: boolean
-    allowLeadingZeros?: boolean
-    isNumericString?: boolean
-    type?: string
-    decimalScale?: number
-    format?: string
-    thousandSeparator?: boolean | string
-    allowedDecimalSeparators?: [string?, string?]
-}
+import CustomFormat from "./typings/CustomFormat";
 
-const defaultProps: PropsType = {
+const defaultProps: CustomFormat = {
     decimalSeparator: '.',
     thousandsGroupStyle: 'thousand',
     fixedDecimalScale: true,
@@ -33,9 +18,9 @@ const defaultProps: PropsType = {
 };
 
 export default class Format {
-    props: PropsType;
-    constructor(props: PropsType = defaultProps) {
-        this.props = props ? { ...defaultProps, ...props } : defaultProps
+    props: CustomFormat;
+    constructor(props: CustomFormat = defaultProps) {
+        this.props = { ...defaultProps, ...props }
     }
 
     public currency = (value: string) => {
@@ -46,7 +31,7 @@ export default class Format {
 
         //apply decimal precision if its defined
         if (this.props.decimalScale !== undefined) {
-            afterDecimal = this.limitToScale(afterDecimal, this.props.decimalScale, this.props.fixedDecimalScale);
+            afterDecimal = this.limitToScale(afterDecimal, this.props.decimalScale ?? 2, this.props.fixedDecimalScale);
         }
 
         if (thousandSeparator) {

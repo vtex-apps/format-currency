@@ -5,6 +5,7 @@ import { useCssHandles } from 'vtex.css-handles'
 import type { CssHandlesTypes } from 'vtex.css-handles'
 
 import formatCurrency from './formatCurrency'
+import CustomFormat from './typings/CustomFormat'
 
 const formatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -48,28 +49,29 @@ const handlesMap: Record<Intl.NumberFormatPartTypes, string> = {
 interface Props {
   value: number
   classes?: CssHandlesTypes.CustomClasses<typeof CSS_HANDLES>
+  customFormat?: CustomFormat
 }
 
-function FormattedCurrency({ value, classes }: Props) {
+function FormattedCurrency({ value, classes, customFormat }: Props) {
   const { culture } = useRuntime()
   const intl = useIntl()
   const { handles } = useCssHandles(CSS_HANDLES, { classes })
 
-  // In case it's IE11
-  if (!hasFormatToParts) {
-    const number = formatCurrency({ intl, culture, value })
+  /**
+* The default "es" currency format is not following the normal conventions of comma separators
+* The comma separator should be each 3 integers ($1,876.00)
+* This validation ensures that the issue on "es" currency locale by UNICODE has a workarround
+* https://unicode-org.atlassian.net/browse/CLDR-13762
+* https://unicode-org.atlassian.net/projects/CLDR/issues/CLDR-13265?filter=allissues&orderby=created%20DESC&keyword=spanish
+*/
+  if (culture.language == 'es' || customFormat) {
+    const number = formatCurrency({ intl, culture, value, customFormat })
 
     return <span className={handles.currencyContainer}>{number}</span>
   }
 
-  /**
- * The default "es" currency format is not following the normal conventions of comma separators
- * The comma separator should be each 3 integers ($1,876.00)
- * This validation ensures that the issue on "es" currency locale by UNICODE has a workarround
- * https://unicode-org.atlassian.net/browse/CLDR-13762
- * https://unicode-org.atlassian.net/projects/CLDR/issues/CLDR-13265?filter=allissues&orderby=created%20DESC&keyword=spanish
- */
-  if (culture.language == 'es') {
+  // In case it's IE11
+  if (!hasFormatToParts) {
     const number = formatCurrency({ intl, culture, value })
 
     return <span className={handles.currencyContainer}>{number}</span>
