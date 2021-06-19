@@ -37,15 +37,20 @@ export default function formatCurrency({
    * https://unicode-org.atlassian.net/projects/CLDR/issues/CLDR-13265?filter=allissues&orderby=created%20DESC&keyword=spanish
    */
   if (culture.language == 'es' || customFormat) {
-
-    const newFormat = {
-      ...customFormat,
-      prefix: customFormat?.prefix ? customFormat?.prefix : culture.customCurrencySymbol,
-      decimalScale: customFormat?.decimalScale ? customFormat?.decimalScale : culture.customCurrencyDecimalDigits
+    const newFormat: CustomFormat = {
+      ...customFormat
     }
 
-    if (!newFormat.prefix) delete newFormat.prefix
-    if (!newFormat.decimalScale) delete newFormat.decimalScale
+    // Get parts from intl defaults
+    const parts = intl.formatNumberToParts(value * 10000, formatOptions)
+    const decimal = [...parts.filter(({ type }) => type == 'decimal')].shift()?.value
+    const group = [...parts.filter(({ type }) => type == 'group')].shift()?.value
+
+    // Set Enviroment defaults
+    if (!customFormat?.decimalSeparator && decimal) newFormat.decimalSeparator = decimal
+    if (!customFormat?.thousandSeparator && decimal) newFormat.thousandSeparator = group
+    if (!customFormat?.prefix) newFormat.prefix = culture.customCurrencySymbol
+    if (!customFormat?.decimalScale) newFormat.decimalScale = culture.customCurrencyDecimalDigits
 
     return new Format(newFormat).currency(`${value}`)
   }
