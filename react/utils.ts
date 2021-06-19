@@ -39,8 +39,6 @@ export default class Format {
     }
 
     public currency = (value: string) => {
-        console.log(this.props);
-        
         const { thousandSeparator, decimalSeparator } = this.getSeparators();
 
         const hasDecimalSeparator = value.indexOf('.') !== -1 || (this.props.decimalScale && this.props.fixedDecimalScale);
