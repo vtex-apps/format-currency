@@ -62,6 +62,19 @@ function FormattedCurrency({ value, classes }: Props) {
     return <span className={handles.currencyContainer}>{number}</span>
   }
 
+  /**
+ * The default "es" currency format is not following the normal conventions of comma separators
+ * The comma separator should be each 3 integers ($1,876.00)
+ * This validation ensures that the issue on "es" currency locale by UNICODE has a workarround
+ * https://unicode-org.atlassian.net/browse/CLDR-13762
+ * https://unicode-org.atlassian.net/projects/CLDR/issues/CLDR-13265?filter=allissues&orderby=created%20DESC&keyword=spanish
+ */
+  if (culture.language == 'es') {
+    const number = formatCurrency({ intl, culture, value })
+
+    return <span className={handles.currencyContainer}>{number}</span>
+  }
+
   const formatOptions: FormatNumberOptions = {
     style: 'currency',
     currency: culture.currency,
