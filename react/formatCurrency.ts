@@ -1,4 +1,5 @@
 import { IntlShape, FormatNumberOptions } from 'react-intl'
+import Format from './utils'
 
 interface FormatCurrencyParams {
   intl: IntlShape
@@ -7,6 +8,7 @@ interface FormatCurrencyParams {
     currency: string
     customCurrencyDecimalDigits?: number | null
     customCurrencySymbol?: string | null
+    language: string | null
   }
 }
 
@@ -22,6 +24,25 @@ export default function formatCurrency({
 
   if (culture.customCurrencyDecimalDigits != null) {
     formatOptions.minimumFractionDigits = culture.customCurrencyDecimalDigits
+  }
+
+  /**
+   * The default "es" currency format is not following the normal conventions of comma separators
+   * The comma separator should be each 3 integers ($1,876.00)
+   * This validation ensures that the issue on "es" currency locale by UNICODE has a workarround
+   * https://unicode-org.atlassian.net/browse/CLDR-13762
+   * https://unicode-org.atlassian.net/projects/CLDR/issues/CLDR-13265?filter=allissues&orderby=created%20DESC&keyword=spanish
+   */
+  if (culture.language == 'es') {
+    let props = {
+      prefix: culture.customCurrencySymbol ?? undefined,
+      decimalScale: culture.customCurrencyDecimalDigits ?? undefined
+    }
+
+    if (!props.prefix) delete props.prefix
+    if (!props.decimalScale) delete props.decimalScale
+
+    return new Format(props).currency(`${value}`)
   }
 
   /**
