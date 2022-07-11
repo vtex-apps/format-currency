@@ -1,7 +1,7 @@
 {
   "vendor": "vtex",
   "name": "format-currency",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "title": "Format Currency",
   "description": "Format currency based on sales policy config",
   "builders": {
