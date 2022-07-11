@@ -100,15 +100,17 @@ function FormattedCurrency({ value, classes }: Props) {
         )
       }
 
-      if (part.type === 'currency' && 
+    if (
+      part.type === 'currency' &&
       culture?.customCurrencySymbol.length > 0 &&
-      settings?.enableCustomCurrencySymbol) {
-        return (
-            <span key={index} className={handle}>
-              {culture.customCurrencySymbol}
-            </span>
-          )
-      }
+      settings?.enableCustomCurrencySymbol
+    ) {
+      return (
+        <span key={index} className={handle}>
+          {culture.customCurrencySymbol}
+        </span>
+      )
+    }
 
       return (
         <span key={index} className={handle}>
