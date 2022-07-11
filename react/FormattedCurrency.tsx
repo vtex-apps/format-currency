@@ -102,7 +102,7 @@ function FormattedCurrency({ value, classes }: Props) {
 
     if (
       part.type === 'currency' &&
-      culture?.customCurrencySymbol.length > 0 &&
+      culture?.customCurrencySymbol &&
       settings?.enableCustomCurrencySymbol
     ) {
       return (
