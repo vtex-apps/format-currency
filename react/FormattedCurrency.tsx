@@ -51,7 +51,8 @@ interface Props {
 }
 
 function FormattedCurrency({ value, classes }: Props) {
-  const { culture } = useRuntime()
+  const { culture, getSettings } = useRuntime()
+  const settings = getSettings('vtex.store')
   const intl = useIntl()
   const { handles } = useCssHandles(CSS_HANDLES, { classes })
 
@@ -98,6 +99,18 @@ function FormattedCurrency({ value, classes }: Props) {
           </span>
         )
       }
+
+    if (
+      part.type === 'currency' &&
+      culture?.customCurrencySymbol.length > 0 &&
+      settings?.enableCustomCurrencySymbol
+    ) {
+      return (
+        <span key={index} className={handle}>
+          {culture.customCurrencySymbol}
+        </span>
+      )
+    }
 
       return (
         <span key={index} className={handle}>
