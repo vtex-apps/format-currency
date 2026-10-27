@@ -5,7 +5,7 @@ export const useCssHandles = (cssHandles) => {
     handles[handle] = handle
   })
 
-  return handles
+  return { handles, withModifiers: () => '' }
 }
 
 const validateModifier = (modifier) => {

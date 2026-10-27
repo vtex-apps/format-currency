@@ -37,6 +37,16 @@ export default Foo
 <span class="vtex-format-currency-0-x-currencyContainer">$ 10.00</span>
 ```
 
+#### Fraction digits
+
+The number of fraction digits does not depend on the runtime's ICU/CLDR version. The default fraction digits of each currency come from a committed table (a CLDR 47 snapshot, `react/utils/currencyFractionDigitsTable.ts`): it lists the ISO 4217 codes whose default differs from 2, and every other code, known or unknown, uses 2, exactly as ICU does. When the Trade Policy has no configured decimal digits, minimum and maximum are both set to that default. When it has a configured value, that value is the minimum and the maximum is the larger of it and the currency default, as before; only the source of the default changed, from the runtime to the table.
+
+To regenerate the table, run on a CLDR 47 runtime (Node 24.13.0) and compare with the committed file:
+
+```sh
+node scripts/generate-currency-fraction-digits.js > react/utils/currencyFractionDigitsTable.ts
+```
+
 #### `formatCurrency`
 
 ```jsx
