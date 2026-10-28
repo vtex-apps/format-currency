@@ -7,7 +7,8 @@
  * uses 2, exactly as ICU does.
  *
  * Regenerate on a CLDR 47 runtime (Node 24.13.0):
- *   node scripts/generate-currency-fraction-digits.js > react/utils/currencyFractionDigitsTable.ts
+ *   node scripts/generate-currency-fraction-digits.js > /tmp/currencyFractionDigitsTable.ts
+ *   diff -u react/utils/currencyFractionDigitsTable.ts /tmp/currencyFractionDigitsTable.ts
  */
 export const DEFAULT_CURRENCY_FRACTION_DIGITS = 2
 

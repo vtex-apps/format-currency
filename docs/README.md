@@ -44,7 +44,8 @@ The number of fraction digits does not depend on the runtime's ICU/CLDR version.
 To regenerate the table, run on a CLDR 47 runtime (Node 24.13.0) and compare with the committed file:
 
 ```sh
-node scripts/generate-currency-fraction-digits.js > react/utils/currencyFractionDigitsTable.ts
+node scripts/generate-currency-fraction-digits.js > /tmp/currencyFractionDigitsTable.ts
+diff -u react/utils/currencyFractionDigitsTable.ts /tmp/currencyFractionDigitsTable.ts
 ```
 
 #### `formatCurrency`

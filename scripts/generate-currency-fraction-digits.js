@@ -15,16 +15,27 @@
  * (Node 24.13.0, ICU 77.1):
  *
  *   ~/.asdf/installs/nodejs/24.13.0/bin/node scripts/generate-currency-fraction-digits.js \
- *     > react/utils/currencyFractionDigitsTable.ts
+ *     > /tmp/currencyFractionDigitsTable.ts
+ *   diff -u react/utils/currencyFractionDigitsTable.ts /tmp/currencyFractionDigitsTable.ts
  *
  * The output must match the committed file. Running it on a different CLDR
  * version (e.g. CLDR 48, where COP/HUF/IDR/PKR became 0 digits and RSD became
  * 2) produces a different table on purpose: do not commit that output unless
  * the change is a deliberate decision.
  */
+const EXPECTED_CLDR = '47.0'
 const DEFAULT_DIGITS = 2
 const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 const exceptions = []
+
+if (process.versions.cldr !== EXPECTED_CLDR) {
+  console.error(
+    `This generator requires CLDR ${EXPECTED_CLDR}; current runtime uses CLDR ${
+      process.versions.cldr || 'unknown'
+    }.`
+  )
+  process.exit(1)
+}
 
 for (const a of LETTERS) {
   for (const b of LETTERS) {
@@ -55,7 +66,8 @@ process.stdout.write(
     ` * uses ${DEFAULT_DIGITS}, exactly as ICU does.`,
     ' *',
     ' * Regenerate on a CLDR 47 runtime (Node 24.13.0):',
-    ' *   node scripts/generate-currency-fraction-digits.js > react/utils/currencyFractionDigitsTable.ts',
+    ' *   node scripts/generate-currency-fraction-digits.js > /tmp/currencyFractionDigitsTable.ts',
+    ' *   diff -u react/utils/currencyFractionDigitsTable.ts /tmp/currencyFractionDigitsTable.ts',
     ' */',
     `export const DEFAULT_CURRENCY_FRACTION_DIGITS = ${DEFAULT_DIGITS}`,
     '',
