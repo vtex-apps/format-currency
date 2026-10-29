@@ -2,9 +2,23 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: format-currency
+  description: Format currency based on sales policy config
+  tags:
+    - typescript
+    - react:16
   annotations:
+    vtex.com/janus-acronym: ""
+    vtex.com/o11y-os-index: ""
+    grafana/dashboard-selector: ""
     github.com/project-slug: vtex-apps/format-currency
+    vtex.com/platform-flow-id: Shopper#1
+    backstage.io/techdocs-ref: dir:../
+    vtex.com/sdd-check-skip: 'true'
+    vtex.com/sdd-check-skip-reason: Non-core component. SDD adoption deferred to next adoption wave
 spec:
-  type: other
-  lifecycle: unknown
+  system: store-framework-ui-apps
+  lifecycle: stable
   owner: te-0013
+  type: frontend-ui
+  dependsOn: []
+  subcomponentOf: store-framework
