@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: format-currency
+  annotations:
+    github.com/project-slug: vtex-apps/format-currency
+spec:
+  type: other
+  lifecycle: unknown
+  owner: te-0013
