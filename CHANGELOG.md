@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Complete `.vtex/catalog-info.yaml` metadata for the DK Portal.
 
+### Fixed
+- `FormattedCurrency` and `formatCurrency` now always derive `minimumFractionDigits` and `maximumFractionDigits` from a VTEX-owned table (a CLDR 47 snapshot of the default currency fraction digits per ISO 4217 code: the codes that differ from 2, with 2 for every other code, exactly as ICU does), so the output no longer depends on the CLDR version of the runtime (CLDR 48 changed the default digits of COP, HUF, IDR, PKR and RSD). The configured decimal digits keep their existing meaning (the minimum; the maximum is the larger of the configured value and the currency default), so no store output changes.
+
 ## [0.4.1] - 2022-07-11
 ### Fix
 - Some admin apps don't use custom currency symbol, refactoring logic
