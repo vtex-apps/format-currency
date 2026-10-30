@@ -12,6 +12,7 @@ metadata:
     grafana/dashboard-selector: ""
     github.com/project-slug: vtex-apps/format-currency
     vtex.com/platform-flow-id: Shopper#1
+    vtex.com/application-id: I3IWJOX3
     backstage.io/techdocs-ref: dir:../
     vtex.com/sdd-check-skip: 'true'
     vtex.com/sdd-check-skip-reason: Non-core component. SDD adoption deferred to next adoption wave
