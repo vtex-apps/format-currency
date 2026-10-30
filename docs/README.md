@@ -1,6 +1,6 @@
 # Format Currency
 
-> Format currency based on sales policy config.
+> Format currency based on the sales policy configuration.
 
 ## Usage
 
