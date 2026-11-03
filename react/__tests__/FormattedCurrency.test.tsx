@@ -88,18 +88,16 @@ const CURRENCIES = [
   'UYW',
 ]
 
-// Mirrors the legacy rule: the configured value is the minimum and the maximum
-// is the larger of it and the currency default (table, CLDR 47).
+// Checkout rule: the configured value is both the minimum and the maximum;
+// without one, both come from the currency default (table, CLDR 47).
 const TABLE_DIGITS: Record<string, number> = { RSD: 0, UYI: 0, CLF: 4, UYW: 4 }
 
 const expectedFor = (currency: string, digits: number | null) => {
-  const table = TABLE_DIGITS[currency] ?? 2
-  const min = digits === null ? table : digits
-  const max = Math.max(min, table)
+  const fixed = digits === null ? TABLE_DIGITS[currency] ?? 2 : digits
 
-  return max === 0
+  return fixed === 0
     ? { integer: '436', fraction: undefined }
-    : { integer: '435', fraction: '83'.padEnd(min, '0') }
+    : { integer: '435', fraction: '83'.padEnd(fixed, '0') }
 }
 
 describe.each(CURRENCIES)('fraction digits for %s', (currency) => {
@@ -133,7 +131,7 @@ describe.each(CURRENCIES)('fraction digits for %s', (currency) => {
 })
 
 describe.each(['COP', 'BRL'])('integer value for %s', (currency) => {
-  test('configured 0 renders no fraction (legacy: min 0)', () => {
+  test('configured 0 renders no fraction', () => {
     mockedUseRuntime.mockImplementation(() => ({
       culture: {
         currency,
@@ -144,6 +142,25 @@ describe.each(['COP', 'BRL'])('integer value for %s', (currency) => {
     }))
 
     const { container } = render(<FormattedCurrency value={436} />)
+
+    expect(container.querySelector('.currencyInteger')?.innerHTML).toBe('436')
+    expect(container.querySelector('.currencyDecimal')).toBeFalsy()
+    expect(container.querySelector('.currencyFraction')).toBeFalsy()
+  })
+})
+
+describe.each(['COP', 'BRL'])('fractional value for %s', (currency) => {
+  test('configured 0 rounds to whole units, like the Checkout', () => {
+    mockedUseRuntime.mockImplementation(() => ({
+      culture: {
+        currency,
+        customCurrencyDecimalDigits: 0,
+        customCurrencySymbol: null,
+      },
+      getSettings: () => ({}),
+    }))
+
+    const { container } = render(<FormattedCurrency value={435.5} />)
 
     expect(container.querySelector('.currencyInteger')?.innerHTML).toBe('436')
     expect(container.querySelector('.currencyDecimal')).toBeFalsy()

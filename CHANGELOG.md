@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- A configured `customCurrencyDecimalDigits` is now both the minimum and the maximum number of fraction digits, matching the VTEX Checkout (which always renders exactly `currencyDecimalDigits` digits). Stores configured with `0` now render fractional prices rounded to whole units (`435.83` becomes `436` instead of `435,83`), and stores configured with `1` no longer render a second digit. Stores without a configured value (`null`) and stores configured with a value at or above the currency default are unchanged.
 
 ## [0.4.2] - 2026-11-03
 ### Added

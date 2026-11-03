@@ -35,13 +35,13 @@ export function getDefaultCurrencyFractionDigits(currency: string): number {
  * Returns the fraction digit options for a culture, never depending on the
  * runtime's CLDR version.
  *
- * A configured `customCurrencyDecimalDigits` is the minimum; the maximum is the
- * larger of the configured value and the currency default, exactly as before
- * (the legacy renderer passed only `minimumFractionDigits` and let Intl derive
- * the maximum). The difference is that the currency default now comes from the
- * committed table instead of the runtime's CLDR.
+ * The number of fraction digits is fixed, as in the VTEX Checkout (which
+ * formats with `value.toFixed(currencyDecimalDigits)`): a configured
+ * `customCurrencyDecimalDigits` is both the minimum and the maximum, so `0`
+ * always renders whole units (rounded) and `2` always renders two digits.
+ * Without a configured value, minimum and maximum both equal the currency
+ * default from the committed table.
  *
- * Without a configured value, minimum and maximum both equal the default.
  * Minimum and maximum are always set together, since older engines throw a
  * RangeError when only maximumFractionDigits is given below the currency
  * default.
@@ -50,14 +50,10 @@ export function getCurrencyFractionOptions(
   culture: FractionCulture
 ): FractionOptions {
   const { customCurrencyDecimalDigits, currency } = culture
-  const digits = getDefaultCurrencyFractionDigits(currency)
-
-  if (customCurrencyDecimalDigits != null) {
-    return {
-      minimumFractionDigits: customCurrencyDecimalDigits,
-      maximumFractionDigits: Math.max(customCurrencyDecimalDigits, digits),
-    }
-  }
+  const digits =
+    customCurrencyDecimalDigits != null
+      ? customCurrencyDecimalDigits
+      : getDefaultCurrencyFractionDigits(currency)
 
   return { minimumFractionDigits: digits, maximumFractionDigits: digits }
 }
