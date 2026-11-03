@@ -1,7 +1,8 @@
 export const useRuntime = jest.fn(() => ({
   culture: {
-    currencyCode: 'BRL',
+    currency: 'BRL',
     customCurrencyDecimalDigits: null,
     customCurrencySymbol: null,
   },
+  getSettings: () => ({}),
 }))

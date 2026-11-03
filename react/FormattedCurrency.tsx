@@ -5,6 +5,7 @@ import { useCssHandles } from 'vtex.css-handles'
 import type { CssHandlesTypes } from 'vtex.css-handles'
 
 import formatCurrency from './formatCurrency'
+import { getCurrencyFractionOptions } from './utils/currencyFractionDigits'
 
 const formatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -66,10 +67,7 @@ function FormattedCurrency({ value, classes }: Props) {
   const formatOptions: FormatNumberOptions = {
     style: 'currency',
     currency: culture.currency,
-  }
-
-  if (culture.customCurrencyDecimalDigits != null) {
-    formatOptions.minimumFractionDigits = culture.customCurrencyDecimalDigits
+    ...getCurrencyFractionOptions(culture),
   }
 
   /**
@@ -100,17 +98,17 @@ function FormattedCurrency({ value, classes }: Props) {
         )
       }
 
-    if (
-      part.type === 'currency' &&
-      culture?.customCurrencySymbol &&
-      settings?.enableCustomCurrencySymbol
-    ) {
-      return (
-        <span key={index} className={handle}>
-          {culture.customCurrencySymbol}
-        </span>
-      )
-    }
+      if (
+        part.type === 'currency' &&
+        culture?.customCurrencySymbol &&
+        settings?.enableCustomCurrencySymbol
+      ) {
+        return (
+          <span key={index} className={handle}>
+            {culture.customCurrencySymbol}
+          </span>
+        )
+      }
 
       return (
         <span key={index} className={handle}>
