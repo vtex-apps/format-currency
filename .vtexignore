@@ -5,4 +5,3 @@ react/**/*.test.js
 react/**/*.test.ts
 react/**/*.test.tsx
 coverage/
-scripts/

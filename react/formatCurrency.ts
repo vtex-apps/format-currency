@@ -1,7 +1,5 @@
 import { IntlShape, FormatNumberOptions } from 'react-intl'
 
-import { getCurrencyFractionOptions } from './utils/currencyFractionDigits'
-
 interface FormatCurrencyParams {
   intl: IntlShape
   value: number
@@ -20,7 +18,10 @@ export default function formatCurrency({
   const formatOptions: FormatNumberOptions = {
     style: 'currency',
     currency: culture.currency,
-    ...getCurrencyFractionOptions(culture),
+  }
+
+  if (culture.customCurrencyDecimalDigits != null) {
+    formatOptions.minimumFractionDigits = culture.customCurrencyDecimalDigits
   }
 
   /**
