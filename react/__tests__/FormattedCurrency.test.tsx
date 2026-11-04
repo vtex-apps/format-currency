@@ -88,24 +88,16 @@ const CURRENCIES = [
   'UYW',
 ]
 
-// Checkout rule: the configured value is both the minimum and the maximum;
-// without one, both come from the currency default (table, CLDR 47).
+// Without a configured value, minimum and maximum come from the currency
+// default (table, CLDR 47).
 const TABLE_DIGITS: Record<string, number> = { RSD: 0, UYI: 0, CLF: 4, UYW: 4 }
 
-const expectedFor = (currency: string, digits: number | null) => {
-  const fixed = digits === null ? TABLE_DIGITS[currency] ?? 2 : digits
-
-  return fixed === 0
-    ? { integer: '436', fraction: undefined }
-    : { integer: '435', fraction: '83'.padEnd(fixed, '0') }
-}
-
 describe.each(CURRENCIES)('fraction digits for %s', (currency) => {
-  test.each([null, 0, 2])('customCurrencyDecimalDigits=%s', (digits) => {
+  test('customCurrencyDecimalDigits=null uses the table default', () => {
     mockedUseRuntime.mockImplementation(() => ({
       culture: {
         currency,
-        customCurrencyDecimalDigits: digits,
+        customCurrencyDecimalDigits: null,
         customCurrencySymbol: null,
       },
       getSettings: () => ({}),
@@ -113,57 +105,56 @@ describe.each(CURRENCIES)('fraction digits for %s', (currency) => {
 
     const { container } = render(<FormattedCurrency value={435.83} />)
 
-    const expected = expectedFor(currency, digits)
+    const fixed = TABLE_DIGITS[currency] ?? 2
     const integer = container.querySelector('.currencyInteger')
     const decimal = container.querySelector('.currencyDecimal')
     const fraction = container.querySelector('.currencyFraction')
 
-    expect(integer?.innerHTML).toBe(expected.integer)
-
-    if (expected.fraction === undefined) {
+    if (fixed === 0) {
+      expect(integer?.innerHTML).toBe('436')
       expect(decimal).toBeFalsy()
       expect(fraction).toBeFalsy()
     } else {
+      expect(integer?.innerHTML).toBe('435')
       expect(decimal).toBeTruthy()
-      expect(fraction?.innerHTML).toBe(expected.fraction)
+      expect(fraction?.innerHTML).toBe('83'.padEnd(fixed, '0'))
     }
   })
-})
 
-describe.each(['COP', 'BRL'])('integer value for %s', (currency) => {
-  test('configured 0 renders no fraction', () => {
-    mockedUseRuntime.mockImplementation(() => ({
-      culture: {
-        currency,
-        customCurrencyDecimalDigits: 0,
-        customCurrencySymbol: null,
-      },
-      getSettings: () => ({}),
-    }))
+  test.each([0, 2, 3])(
+    'customCurrencyDecimalDigits=%s matches 0.4.1',
+    (digits) => {
+      mockedUseRuntime.mockImplementation(() => ({
+        culture: {
+          currency,
+          customCurrencyDecimalDigits: digits,
+          customCurrencySymbol: null,
+        },
+        getSettings: () => ({}),
+      }))
 
-    const { container } = render(<FormattedCurrency value={436} />)
+      for (const value of [435.83, 435.5, 436]) {
+        const { container, unmount } = render(
+          <FormattedCurrency value={value} />
+        )
 
-    expect(container.querySelector('.currencyInteger')?.innerHTML).toBe('436')
-    expect(container.querySelector('.currencyDecimal')).toBeFalsy()
-    expect(container.querySelector('.currencyFraction')).toBeFalsy()
-  })
-})
+        // Same options as 0.4.1, on the test runtime: only the minimum is set.
+        const parts = new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency,
+          minimumFractionDigits: digits,
+        }).formatToParts(value)
 
-describe.each(['COP', 'BRL'])('fractional value for %s', (currency) => {
-  test('configured 0 rounds to whole units, like the Checkout', () => {
-    mockedUseRuntime.mockImplementation(() => ({
-      culture: {
-        currency,
-        customCurrencyDecimalDigits: 0,
-        customCurrencySymbol: null,
-      },
-      getSettings: () => ({}),
-    }))
+        const part = (type: string) => parts.find((p) => p.type === type)?.value
 
-    const { container } = render(<FormattedCurrency value={435.5} />)
-
-    expect(container.querySelector('.currencyInteger')?.innerHTML).toBe('436')
-    expect(container.querySelector('.currencyDecimal')).toBeFalsy()
-    expect(container.querySelector('.currencyFraction')).toBeFalsy()
-  })
+        expect(container.querySelector('.currencyInteger')?.innerHTML).toBe(
+          part('integer')
+        )
+        expect(container.querySelector('.currencyFraction')?.innerHTML).toBe(
+          part('fraction')
+        )
+        unmount()
+      }
+    }
+  )
 })

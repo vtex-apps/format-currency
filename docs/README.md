@@ -39,7 +39,7 @@ export default Foo
 
 #### Fraction digits
 
-The number of fraction digits does not depend on the runtime's ICU/CLDR version. The default fraction digits of each currency come from a committed table (a CLDR 47 snapshot, `react/utils/currencyFractionDigitsTable.ts`): it lists the ISO 4217 codes whose default differs from 2, and every other code, known or unknown, uses 2, exactly as ICU does. When the Trade Policy has no configured decimal digits, minimum and maximum are both set to that default. When it has a configured value, that value is both the minimum and the maximum, so the number of fraction digits is fixed, as in the VTEX Checkout: `0` always renders whole units (rounded) and `2` always renders two digits.
+When the Trade Policy has no configured decimal digits, the number of fraction digits does not depend on the runtime's ICU/CLDR version: minimum and maximum are both set to the currency default from a committed table (a CLDR 47 snapshot, `react/utils/currencyFractionDigitsTable.ts`), which lists the ISO 4217 codes whose default differs from 2; every other code, known or unknown, uses 2, exactly as ICU does. When the Trade Policy has a configured value, it is used as the minimum number of fraction digits, and the maximum is the runtime's currency default.
 
 To regenerate the table, run on a CLDR 47 runtime (Node 24.13.0) and compare with the committed file:
 

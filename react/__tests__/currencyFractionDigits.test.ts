@@ -9,50 +9,34 @@ import {
 } from '../utils/currencyFractionDigits'
 
 describe('getCurrencyFractionOptions', () => {
-  it('custom digits are both the minimum and the maximum, like the Checkout', () => {
+  it('custom digits only set the minimum, exactly as in 0.4.1', () => {
     expect(
       getCurrencyFractionOptions({
         currency: 'BRL',
         customCurrencyDecimalDigits: 0,
       })
-    ).toEqual({ minimumFractionDigits: 0, maximumFractionDigits: 0 })
+    ).toEqual({ minimumFractionDigits: 0 })
 
     expect(
       getCurrencyFractionOptions({
         currency: 'COP',
         customCurrencyDecimalDigits: 0,
       })
-    ).toEqual({ minimumFractionDigits: 0, maximumFractionDigits: 0 })
+    ).toEqual({ minimumFractionDigits: 0 })
 
     expect(
       getCurrencyFractionOptions({
         currency: 'COP',
         customCurrencyDecimalDigits: 3,
       })
-    ).toEqual({ minimumFractionDigits: 3, maximumFractionDigits: 3 })
+    ).toEqual({ minimumFractionDigits: 3 })
 
-    expect(
-      getCurrencyFractionOptions({
-        currency: 'RSD',
-        customCurrencyDecimalDigits: 2,
-      })
-    ).toEqual({ minimumFractionDigits: 2, maximumFractionDigits: 2 })
-
-    expect(
-      getCurrencyFractionOptions({
-        currency: 'CLF',
-        customCurrencyDecimalDigits: 2,
-      })
-    ).toEqual({ minimumFractionDigits: 2, maximumFractionDigits: 2 })
-  })
-
-  it('custom digits ignore the table, even for an unknown currency', () => {
     expect(
       getCurrencyFractionOptions({
         currency: 'AAA',
-        customCurrencyDecimalDigits: 0,
+        customCurrencyDecimalDigits: 2,
       })
-    ).toEqual({ minimumFractionDigits: 0, maximumFractionDigits: 0 })
+    ).toEqual({ minimumFractionDigits: 2 })
   })
 
   it('null digits use the table default', () => {

@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Changed
-- A configured `customCurrencyDecimalDigits` is now both the minimum and the maximum number of fraction digits, matching the VTEX Checkout (which always renders exactly `currencyDecimalDigits` digits). Stores configured with `0` now render fractional prices rounded to whole units (`435.83` becomes `436` instead of `435,83`), and stores configured with `1` no longer render a second digit. Stores without a configured value (`null`) and stores configured with a value at or above the currency default are unchanged.
+- A configured `customCurrencyDecimalDigits` is back to the 0.4.1 behavior: it only sets `minimumFractionDigits`, and the maximum stays with the runtime's currency default, so stores with a configured value render exactly what they render today. Only stores without a configured value (`null`) use the committed table, with minimum and maximum both set to the currency default. For COP, HUF, IDR and PKR this keeps the two fraction digits that the VTEX Checkout renders when the Trade Policy currency format uses 2 digits, instead of the 0 digits of CLDR 48 browsers.
 
 ## [0.4.2] - 2026-11-03
 ### Added

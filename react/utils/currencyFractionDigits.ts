@@ -12,7 +12,7 @@ interface FractionCulture {
 
 interface FractionOptions {
   minimumFractionDigits: number
-  maximumFractionDigits: number
+  maximumFractionDigits?: number
 }
 
 /**
@@ -32,28 +32,32 @@ export function getDefaultCurrencyFractionDigits(currency: string): number {
 }
 
 /**
- * Returns the fraction digit options for a culture, never depending on the
- * runtime's CLDR version.
+ * Returns the fraction digit options for a culture.
  *
- * The number of fraction digits is fixed, as in the VTEX Checkout (which
- * formats with `value.toFixed(currencyDecimalDigits)`): a configured
- * `customCurrencyDecimalDigits` is both the minimum and the maximum, so `0`
- * always renders whole units (rounded) and `2` always renders two digits.
- * Without a configured value, minimum and maximum both equal the currency
- * default from the committed table.
+ * Without a configured `customCurrencyDecimalDigits`, minimum and maximum both
+ * equal the currency default from the committed table, so the output never
+ * depends on the runtime's CLDR version. The VTEX Checkout renders
+ * `value.toFixed(currencyDecimalDigits)` with the digits of the Trade Policy
+ * currency format, which match this default when the store keeps it.
  *
- * Minimum and maximum are always set together, since older engines throw a
- * RangeError when only maximumFractionDigits is given below the currency
- * default.
+ * With a configured value, only the minimum is set, exactly as in 0.4.1: the
+ * maximum stays with the runtime's currency default, so stores with a
+ * configured value keep the output they have today.
+ *
+ * Minimum and maximum are set together in the default case, since older
+ * engines throw a RangeError when only maximumFractionDigits is given below
+ * the currency default.
  */
 export function getCurrencyFractionOptions(
   culture: FractionCulture
 ): FractionOptions {
   const { customCurrencyDecimalDigits, currency } = culture
-  const digits =
-    customCurrencyDecimalDigits != null
-      ? customCurrencyDecimalDigits
-      : getDefaultCurrencyFractionDigits(currency)
+
+  if (customCurrencyDecimalDigits != null) {
+    return { minimumFractionDigits: customCurrencyDecimalDigits }
+  }
+
+  const digits = getDefaultCurrencyFractionDigits(currency)
 
   return { minimumFractionDigits: digits, maximumFractionDigits: digits }
 }
