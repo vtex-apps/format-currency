@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Revert the CLDR 47 currency fraction digits table introduced in 0.4.2 (#40); `FormattedCurrency` and `formatCurrency` once again derive fraction digits from the runtime's `Intl.NumberFormat`.
 
 ## [0.4.2] - 2026-11-03
 ### Added
